@@ -49,6 +49,11 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(function(req, res, next){
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+});
 var MySQLStore = require('express-mysql-session')(session);
 
 app.use('/', index);
@@ -56,8 +61,6 @@ app.use('/users', users);
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log(username, '111111111111');
-    console.log(password, '2222222222222');
     const db = require('./db');
     db.query('SELECT id, password FROM users WHERE users.username= ?', [username], function(err, results, fields){
       if (err) {done(err)};
@@ -74,7 +77,6 @@ passport.use(new LocalStrategy(
         }
       })
     })
-    return done(null, false);
   }
 ));
 

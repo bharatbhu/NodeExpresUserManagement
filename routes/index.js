@@ -21,6 +21,12 @@ router.get('/login', function(req, res){
   res.render('login', {title: 'Login'});
 })
 
+router.get('/logout', function(req, res){
+  req.logout();
+  req.session.destroy();
+  res.redirect('/');
+})
+
 router.get('/register', function(req, res, next) {
   res.render('register', { title: 'Registration' });
 });
